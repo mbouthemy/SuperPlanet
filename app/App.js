@@ -50,6 +50,7 @@ const Tab = createBottomTabNavigator();
 function TabNavigation() {
   return (
       <Tab.Navigator
+          initialRouteName = 'StartMission'
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
@@ -81,7 +82,7 @@ function TabNavigation() {
 function MainStackScreen() {
   return (
       <MainStack.Navigator
-          initialRouteName='MainTab'
+          initialRouteName='Login'
           navigationOptions = {{
             header: null,
           }}
@@ -90,7 +91,9 @@ function MainStackScreen() {
           unmountInactiveRoutes: true,
           headerShown: false,
         })}/>
-        <MainStack.Screen name='Login' component={Login} options={{ title: 'Login' }}/>
+        <MainStack.Screen name='Login' component={Login} options={{
+          headerShown: false
+        }}/>
       </MainStack.Navigator>
   );
 }
