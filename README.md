@@ -4,6 +4,7 @@
 
 This project is a mobile application called SuperPlanet which is made to encourage children to clean up the planets.
 
+It is made for the challenge of Pytorch Summer Hackathon 2020.
 
 ## Requirements
 The library has some requirements :
