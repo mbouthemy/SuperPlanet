@@ -15,6 +15,7 @@ import {
     updateInformationUserFirebase
 } from "../../Services/UploadService";
 import {renderLoading} from '../../Utils/Utils';
+import { connect } from 'react-redux';
 
 class StartMission extends React.Component {
 
@@ -66,9 +67,14 @@ class StartMission extends React.Component {
                         console.log('The picture has been correctly uploaded.');
                         this.state.storageRef.getDownloadURL().then((downloadURL) => {
                             console.log('Download URL: ', downloadURL)
+                            const currentTime = getFormattedDate();
+
+                            const action = { type: "ADD_START_MISSION", value: {imageURL: downloadURL, time: currentTime}};
+                            this.props.dispatch(action);
+
                             this.setState({imageURL: downloadURL, isLoading: false, isImageUploaded: true});
                             this.props.navigation.navigate('EndMission');
-                            updateInformationUserFirebase(auth().currentUser.uid, {image_start_mission: this.state.imageURL, time_start_mission: getFormattedDate()})
+                            updateInformationUserFirebase(auth().currentUser.uid, {image_start_mission: this.state.imageURL, time_start_mission: currentTime})
                                 .then(() => {
                                     console.log('Success: Added image in Firebase of the user: ', auth().currentUser.uid);
                                 })
@@ -149,4 +155,10 @@ const styles = StyleSheet.create({
 
 
 
-export default (StartMission);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch: (action) => { dispatch(action) }
+    }
+}
+
+export default connect(mapDispatchToProps)(StartMission);

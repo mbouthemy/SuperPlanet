@@ -35,6 +35,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from "./src/Views/Login";
 import EndMission from "./src/Views/EndMission";
 import ScoreResults from "./src/Views/ScoreResults";
+import {persistStore} from "redux-persist";
+import { Provider } from 'react-redux'
+import Store from './Store/configureStore'
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 const MainStack = createStackNavigator();
 
@@ -103,10 +107,15 @@ function MainStackScreen() {
 }
 
 export default function App() {
+  let persistor = persistStore(Store)
   return (
+      <Provider store={Store}>
+        <PersistGate loading={null} persistor={persistor}>
           <NavigationContainer>
             <MainStackScreen/>
           </NavigationContainer>
+        </PersistGate>
+      </Provider>
   );
 }
 

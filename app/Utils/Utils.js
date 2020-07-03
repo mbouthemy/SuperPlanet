@@ -70,6 +70,12 @@ export function uuidv4() {
     });
 }
 
+
+export function convertDateFormatToSeconds(date: string){
+    const dateMinutesSeconds = date.slice(-8).split('_');
+    return dateMinutesSeconds[0]*3600 + dateMinutesSeconds[1]*60 + dateMinutesSeconds[2]*1
+}
+
 export function renderLoading(isLoading) {
     if (isLoading) {
         return (

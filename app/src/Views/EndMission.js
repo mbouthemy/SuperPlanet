@@ -14,6 +14,7 @@ import {
 import ImagePicker from "react-native-image-picker";
 import {getFormattedDate, imagePickerOptions, renderLoading} from "../../Utils/Utils";
 import auth from "@react-native-firebase/auth";
+import {connect} from "react-redux";
 
 
 class EndMission extends React.Component {
@@ -55,7 +56,12 @@ class EndMission extends React.Component {
                     .then(() => {
                         console.log('The picture has been correctly uploaded.');
                         this.state.storageRef.getDownloadURL().then((downloadURL) => {
-                            console.log('Download URL: ', downloadURL)
+                            console.log('Download URL: ', downloadURL);
+                            const currentTime = getFormattedDate();
+
+                            const action = { type: "ADD_END_MISSION", value: {imageURL: downloadURL, time: currentTime}};
+                            this.props.dispatch(action);
+
                             this.setState({imageURL: downloadURL, isLoading: false, isImageUploaded: true});
                             this.props.navigation.navigate('ScoreResults');
                             updateInformationUserFirebase(auth().currentUser.uid, {image_end_mission: this.state.imageURL, time_end_mission: getFormattedDate()})
@@ -123,5 +129,10 @@ const styles = StyleSheet.create({
 
 })
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch: (action) => { dispatch(action) }
+    }
+}
 
-export default (EndMission);
+export default connect(mapDispatchToProps)(EndMission);
