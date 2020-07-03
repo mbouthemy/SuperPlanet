@@ -85,6 +85,8 @@ target 'app' do
 
   pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'appTests' do
     inherit! :complete
     # Pods for testing

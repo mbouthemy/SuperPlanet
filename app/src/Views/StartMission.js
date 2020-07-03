@@ -4,16 +4,32 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button, Switch, TouchableOpacity, Image} from 'react-native';
 import auth from "@react-native-firebase/auth";
 
+import ImagePicker from 'react-native-image-picker';
+import { imagePickerOptions } from '../../Utils/Utils';
+import { Platform } from 'react-native';
+import storage from '@react-native-firebase/storage';
+import {getFormattedDate} from "../../Utils/Utils";
+import {
+    createStorageReferenceToFile,
+    getFileLocalPath,
+    updateInformationUserFirebase
+} from "../../Services/UploadService";
+import {renderLoading} from '../../Utils/Utils';
+
 class StartMission extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            imageURI: '',
+            storageRef: undefined,
+            imageURL: '',
+            isLoading: false,
+            isImageUploaded: false,
         }
     }
 
     _signOutUser = async () => {
-
         console.log('[AUTH] Sign Out the User.')
         try {
             await auth().signOut();
@@ -23,16 +39,54 @@ class StartMission extends React.Component {
         }
     }
 
-    _startMission() {
-        console.log('Start the mission');
+    _uploadImageToFireBase = (imagePickerResponse, pathFirestore) => {
+        const fileSource = getFileLocalPath(imagePickerResponse);
+        const storageRef = createStorageReferenceToFile(pathFirestore);
+        this.setState({storageRef: storageRef})
+        return storageRef.putFile(fileSource);
+    };
+
+    _uploadImage(){
+        ImagePicker.showImagePicker(imagePickerOptions, (response) => {
+            if (response.didCancel) {
+                console.log('Post Canceled')
+            }
+            else if (response.error) {
+                console.log('Error : ', response.error)
+            }
+            else {
+                console.log('Photo URI: ', response.uri )
+                let requireSource = { uri: response.uri }
+                this.setState({imageURI: requireSource, isLoading: true})
+
+                const pathFirestoreImageUser: string = 'users/' + auth().currentUser.uid + '/images/start_img_' + getFormattedDate(true);
+
+                Promise.resolve(this._uploadImageToFireBase(response, pathFirestoreImageUser))
+                    .then(() => {
+                        console.log('The picture has been correctly uploaded.');
+                        this.state.storageRef.getDownloadURL().then((downloadURL) => {
+                            console.log('Download URL: ', downloadURL)
+                            this.setState({imageURL: downloadURL, isLoading: false, isImageUploaded: true});
+                            this.props.navigation.navigate('EndMission');
+                            updateInformationUserFirebase(auth().currentUser.uid, {image_start_mission: this.state.imageURL, time_start_mission: getFormattedDate()})
+                                .then(() => {
+                                    console.log('Success: Added image in Firebase of the user: ', auth().currentUser.uid);
+                                })
+                                .catch((error) => console.log(error));
+                        });
+                    })
+                    .catch(error => {console.log('Error: ', error)});
+            }
+        })
     }
+
 
     render() {
 
         return (
             <View style={styles.main_container}>
                 <Button
-                    title='Sign out'
+                    title='Sign out (only in debug)'
                     onPress={() => this._signOutUser()}
                 />
                 <Text style={styles.descriptionText}>
@@ -41,10 +95,12 @@ class StartMission extends React.Component {
                 </Text>
                 <TouchableOpacity
                     style={styles.btnStartMission}
-                    onPress={() => this._startMission()}>
+                    onPress={() => this._uploadImage()}>
                     <Image style={{width:60, height:60}} source={require('../../Assets/Images/ic_superhero.png')}/>
                     <Text style={styles.textIcon}>Start a new mission !</Text>
                 </TouchableOpacity>
+                {this.state.imageURI !== '' && <Image source={this.state.imageURI} style={styles.iconRecord} />}
+                {renderLoading(this.state.isLoading)}
             </View>
         );
     }
