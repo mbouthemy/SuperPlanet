@@ -34,6 +34,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from "./src/Views/Login";
 import EndMission from "./src/Views/EndMission";
+import ScoreResults from "./src/Views/ScoreResults";
 
 const MainStack = createStackNavigator();
 
@@ -94,6 +95,9 @@ function MainStackScreen() {
         <MainStack.Screen name='Login' component={Login} options={{
           headerShown: false
         }}/>
+        <MainStack.Screen name='ScoreResults' component={ScoreResults} options={({ navigation, route }) => ({
+          headerShown: false,
+        })}/>
       </MainStack.Navigator>
   );
 }

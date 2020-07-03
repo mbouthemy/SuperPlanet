@@ -16,23 +16,30 @@ class ScoreResults extends React.Component {
         }
     }
 
-    _endMission() {
-        console.log('End the mission');
+    _clickButton() {
     }
+
 
     render() {
         return (
             <View style={styles.main_container}>
+                <View style={{flexDirection: 'column', justifyContent: 'space-around' }}>
+                    <View>
+                        <Image style={styles.picture} source={require('../../Assets/Images/logo_batman.png')}/>
+                    </View>
+                    <View>
+                        <Image style={styles.picture} source={require('../../Assets/Images/logo_batman.png')} />
+                    </View>
+                </View>
                 <Text style={styles.descriptionText}>
-                    When you're done, just click on the button to take a picture of the place that you've cleaned
-                    and get some rewards points !
+                    The mission is finished ! Now it is time to count your score. Wait a little, we are comparing the
+                    two pictures with our algorithm !
                 </Text>
-                <TouchableOpacity
-                    style={styles.btnEndMission}
-                    onPress={() => this._endMission()}>
-                    <Image style={{width:60, height:60}} source={require('../../Assets/Images/ic_like.png')}/>
-                    <Text style={styles.textIcon}>End the mission !</Text>
-                </TouchableOpacity>
+                <Button
+                    title='Done'
+                    onPress={() => this.props.navigation.navigate('LeaderBoard')}
+                    color='green'
+                />
             </View>
         );
     }
@@ -45,6 +52,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent:'center', // Y Axis
         alignItems: 'center',
+    },
+    picture: {
+        width: 280,
+        height: 160,
+        borderRadius: 10,
+        borderColor: '#9B9B9B',
+        borderWidth: 2,
+        marginBottom: 10
     },
     descriptionText: {
         textAlign: 'center',
