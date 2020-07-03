@@ -79,6 +79,12 @@ target 'app' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNFBStorage', :path => '../node_modules/@react-native-firebase/storage'
+
+  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
+
+  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
+
   target 'appTests' do
     inherit! :complete
     # Pods for testing

@@ -4,26 +4,60 @@ import React, {useState} from 'react'
 import {
     StyleSheet,
     View,
-    Text, Button, Switch, TextInput, ActivityIndicator
+    Text, Button, Switch, TextInput, ActivityIndicator, Alert
 } from 'react-native'
+import auth from '@react-native-firebase/auth';
+import {addInformationUserFirebase} from "../../Services/UploadService";
 
 
 class Login extends React.Component {
 
     constructor(props) {
         super(props);
-        this.messageText = '';
+        this.userName = '';
         this.state = {
             isLoading: false,
+            isPossibleToLog: false,
         };
     }
 
-    _messageTextInputChanged(text) {
-        this.messageText = text;
+    componentDidMount() {
+        this.__isTheUserAuthenticated();
     }
 
+    _messageTextInputChanged(text) {
+        this.userName = text;
+        this.setState({isPossibleToLog: true});
+    }
+
+    __isTheUserAuthenticated = () => {
+        if (auth().currentUser) {
+            console.log('User is Logged', auth().currentUser.uid);
+            this.props.navigation.navigate('MainTab');
+        } else {
+            console.log('User is not Logged');
+        }
+    };
+
     _handleSubmit = () => {
-        this.props.navigation.navigate('MainTab');
+        this.setState({isLoading: true});
+        auth().signInAnonymously()
+            .then((res) => {
+                addInformationUserFirebase(res.user.uid,
+                    {id: res.user.uid, name: this.userName, points: 0})
+                    .then(() => {
+                        console.log('Success: Added Presentation on the user: ', res.user.uid);
+                    })
+                    .catch((error) => console.log(error));
+
+                this.setState({isLoading: false});
+                console.log('User logged-in successfully!');
+                this.props.navigation.navigate('MainTab');
+            })
+            .catch(error => {
+                Alert.alert('Incorrect credentials',
+                    'The login information are incorrect. You can reset your password if you forgot it.');
+            })
     }
 
     render() {
@@ -50,6 +84,7 @@ class Login extends React.Component {
                     title='Next'
                     onPress={this._handleSubmit}
                     color='green'
+                    disabled={!this.state.isPossibleToLog}
                 />
             </View>
         );

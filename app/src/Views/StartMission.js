@@ -2,12 +2,24 @@
 
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button, Switch, TouchableOpacity, Image} from 'react-native';
+import auth from "@react-native-firebase/auth";
 
 class StartMission extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
+        }
+    }
+
+    _signOutUser = async () => {
+
+        console.log('[AUTH] Sign Out the User.')
+        try {
+            await auth().signOut();
+            this.props.navigation.navigate('Login');
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -19,6 +31,10 @@ class StartMission extends React.Component {
 
         return (
             <View style={styles.main_container}>
+                <Button
+                    title='Sign out'
+                    onPress={() => this._signOutUser()}
+                />
                 <Text style={styles.descriptionText}>
                     You're just ready to start a new mission ! When you have found a new place to clean, press the button
                     to start the mission and take the picture of the place !
