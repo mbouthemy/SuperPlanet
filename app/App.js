@@ -77,9 +77,9 @@ function TabNavigation() {
             keyboardHidesTabBar: true,
           }}
       >
-        <Tab.Screen name='LeaderBoard' component={LeaderBoard} />
-        <Tab.Screen name='StartMission' component={StartMission} />
-        <Tab.Screen name='EndMission' component={EndMission} />
+        <Tab.Screen name='LeaderBoard' component={LeaderBoard} options={{title: "Leaderboard"}}/>
+        <Tab.Screen name='StartMission' component={StartMission} options={{title: "Start Mission"}}/>
+        <Tab.Screen name='EndMission' component={EndMission} options={{title: "Finish Mission"}}/>
       </Tab.Navigator>
   );
 }

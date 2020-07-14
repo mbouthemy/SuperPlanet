@@ -16,6 +16,8 @@ import {
 } from "../../Services/UploadService";
 import {renderLoading} from '../../Utils/Utils';
 import { connect } from 'react-redux';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 class StartMission extends React.Component {
 
@@ -91,10 +93,10 @@ class StartMission extends React.Component {
 
         return (
             <View style={styles.main_container}>
-                <Button
-                    title='Sign out (only in debug)'
-                    onPress={() => this._signOutUser()}
-                />
+                {/*<Button*/}
+                {/*    title='Sign out (only in debug)'*/}
+                {/*    onPress={() => this._signOutUser()}*/}
+                {/*/>*/}
                 <Text style={styles.descriptionText}>
                     You're just ready to start a new mission ! When you have found a new place to clean, press the button
                     to start the mission and take the picture of the place !
@@ -105,6 +107,8 @@ class StartMission extends React.Component {
                     <Image style={{width:60, height:60}} source={require('../../Assets/Images/ic_superhero.png')}/>
                     <Text style={styles.textIcon}>Start a new mission !</Text>
                 </TouchableOpacity>
+                <Image style={styles.imagePark} source={require('../../Assets/Images/park_with_garbage.jpg')}/>
+
                 {this.state.imageURI !== '' && <Image source={this.state.imageURI} style={styles.iconRecord} />}
                 {renderLoading(this.state.isLoading)}
             </View>
@@ -118,39 +122,40 @@ const styles = StyleSheet.create({
         justifyContent:'center', // Y Axis
         alignItems: 'center',
     },
-    progressText: {
-        paddingTop: 50,
-        fontSize: 50,
-        color: "#fff"
-    },
     descriptionText: {
         textAlign: 'center',
         fontSize: 18,
         marginBottom: 20,
         width: 300,
     },
+    imagePark: {
+        width:160,
+        height:160,
+        borderRadius: 180,
+    },
     textIcon: {
+        color: '#2fb126',
         fontSize: 16,
     },
-    // Icons Recording and stop
+    //
     btnStartMission: {
-        backgroundColor:"#70a139",
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 6, // Android
         width:180,
         height:180,
         borderRadius:360,
         alignItems:'center',
         justifyContent:'center',
-        marginBottom: 50
+        marginBottom: 10
     },
     iconRecord: {
         width: 50,
         height: 50
     },
-
-    btnNext: {
-        width: 200,
-    },
-
 });
 
 

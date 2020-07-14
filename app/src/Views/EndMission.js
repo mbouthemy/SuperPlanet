@@ -4,7 +4,7 @@ import React, {useState} from 'react'
 import {
     StyleSheet,
     View,
-    Text, Button, Switch, TouchableOpacity, Image
+    Text, Button, Switch, TouchableOpacity, Image, ActivityIndicator
 } from 'react-native'
 import {
     createStorageReferenceToFile,
@@ -77,19 +77,25 @@ class EndMission extends React.Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={styles.loading_container}>
+                    <ActivityIndicator size='large' />
+                </View>
+            );
+        }
         return (
             <View style={styles.main_container}>
                 <Text style={styles.descriptionText}>
-                    When you're done, just click on the button to take a picture of the place that you've cleaned
+                    When you're done, just click on the button to take a picture of the same place where you have cleaned
                     and get some rewards points !
                 </Text>
                 <TouchableOpacity
                     style={styles.btnEndMission}
                     onPress={() => this._uploadImage()}>
                     <Image style={{width:60, height:60}} source={require('../../Assets/Images/ic_like.png')}/>
-                    <Text style={styles.textIcon}>End the mission !</Text>
+                    <Text style={styles.textIcon}>Finish the mission !</Text>
                 </TouchableOpacity>
-                {renderLoading(this.state.isLoading)}
             </View>
         );
     }
@@ -113,21 +119,33 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnEndMission: {
-        backgroundColor:"#70a139",
-        width:160,
-        height:160,
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 6, // Android
+        width:180,
+        height:180,
         borderRadius:360,
         alignItems:'center',
         justifyContent:'center',
-        marginBottom: 50
+        marginBottom: 10
     },
-    iconRecord: {
-        width: 50,
-        height: 50
+
+    loading_container: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F3F3F3'
     },
 
 
-})
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {
