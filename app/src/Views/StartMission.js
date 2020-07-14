@@ -93,10 +93,10 @@ class StartMission extends React.Component {
 
         return (
             <View style={styles.main_container}>
-                {/*<Button*/}
-                {/*    title='Sign out (only in debug)'*/}
-                {/*    onPress={() => this._signOutUser()}*/}
-                {/*/>*/}
+                <Button
+                    title='Sign out (only in debug)'
+                    onPress={() => this._signOutUser()}
+                />
                 <Text style={styles.descriptionText}>
                     You're just ready to start a new mission ! When you have found a new place to clean, press the button
                     to start the mission and take the picture of the place !

@@ -4,8 +4,8 @@ import React, {useState} from 'react'
 import {
     StyleSheet,
     View,
-    Text, Button, Switch, TextInput, ActivityIndicator, Alert
-} from 'react-native'
+    Text, Button, Switch, TextInput, ActivityIndicator, Alert, Image
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {addInformationUserFirebase} from "../../Services/UploadService";
 
@@ -60,6 +60,14 @@ class Login extends React.Component {
             })
     }
 
+    _openTermsConditions(){
+        this.props.navigation.navigate('ViewPDF', {sourcePDF: 'bundle-assets://pdf/TermsAndConditions.pdf'});
+    }
+
+    _openPrivacyPolicy() {
+        this.props.navigation.navigate('ViewPDF', {sourcePDF: 'bundle-assets://pdf/PrivacyPolicy.pdf'});
+    }
+
     render() {
         if(this.state.isLoading){
             return(
@@ -70,22 +78,36 @@ class Login extends React.Component {
         }
         return (
             <View style={styles.container}>
-                <Text>Welcome to the SuperPlanet application !</Text>
-                <Text>Please tell us your superhero name:</Text>
-                <TextInput style={[styles.inputs]}
-                           multiline={true}
-                           placeholder='Write your superhero name'
-                           underlineColorAndroid='transparent'
-                           ref={input => { this.textInput = input }}
-                           onChangeText={(text) => this._messageTextInputChanged(text)}
-                           onSubmitEditing={() => this._handleSubmit}
-                />
+                <Image source={require('../../Assets/AppIcons/logo_app.png')} style={styles.appLogo}/>
+                <Text style={styles.textIntroduction}>Congratulations for your application and welcome in the Gaia's League ! {"\n"} {"\n"}
+                    Your mission, should you choose to accept it, is to help clean up this planet before it becomes a gigantic dump. {"\n"} {"\n"}
+                    But first, what is your superhero's name ?
+                </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput style={[styles.inputs]}
+                               multiline={false}
+                               placeholder='Write your superhero name'
+                               underlineColorAndroid='transparent'
+                               ref={input => { this.textInput = input }}
+                               onChangeText={(text) => this._messageTextInputChanged(text)}
+                               onSubmitEditing={this._handleSubmit}
+                    />
+                </View>
                 <Button
-                    title='Next'
+                    title='Sign In'
                     onPress={this._handleSubmit}
                     color='green'
                     disabled={!this.state.isPossibleToLog}
                 />
+
+                {/*Terms & Conditions footer.
+                <Text style={styles.termsConditionText}>
+                    By clicking on log in, you agree with our
+                    <Text style={styles.linkTermsText}
+                          onPress={() => this._openTermsConditions()}> Terms & conditions</Text> and the
+                    <Text style={styles.linkTermsText}
+                          onPress={() => this._openPrivacyPolicy()}> Privacy Policy.</Text>
+                </Text>*/}
             </View>
         );
     }
@@ -95,12 +117,25 @@ class Login extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: 35,
-        backgroundColor: '#fff'
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
     },
+    appLogo: {
+        marginBottom: 20,
+        width: 100,
+        height: 100,
+        borderRadius: 20,
+    },
+    textIntroduction: {
+        textAlign: 'center',
+        marginBottom: 20,
+        fontSize: 16,
+        width: 300,
+    },
+
     preloader: {
         left: 0,
         right: 0,
@@ -111,55 +146,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff'
     },
+    inputContainer: {
+        borderBottomColor: '#707578',
+        borderRadius:30,
+        borderBottomWidth: 1,
+        height:30,
+        flexDirection: 'row',
+        alignItems:'center',
+        marginBottom: 50,
+    },
     inputs:{
         height:40,
-        marginLeft:16,
         borderBottomColor: '#FFFFFF',
-        flex:1,
-    },
-    // Google Sign in
-    signInButton: {
-        width: 192,
-        height: 48
-    },
-    userInfoContainer: {
-        marginVertical: 20
-    },
-    profileImageContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    profileImage: {
-        width: 100,
-        height: 100
-    },
-    displayTitle: {
-        fontSize: 22,
-        color: '#010101'
-    },
-    inputStyle: {
-        width: '100%',
-        marginBottom: 15,
-        paddingBottom: 15,
-        alignSelf: "center",
-        borderColor: "#ccc",
-        borderBottomWidth: 1
-    },
-    loginText: {
-        color: '#3740FE',
-        marginTop: 25,
-        textAlign: 'center'
-    },
-    forgottenPasswordText: {
-        color: '#b41233',
-        marginTop: 25,
-        textAlign: 'center'
     },
     termsConditionText: {
         marginTop: 25,
-        textAlign: 'center'
+        textAlign: 'center',
+    },
+    linkTermsText: {
+        color: '#243db6',
     },
 });
 

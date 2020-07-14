@@ -39,6 +39,7 @@ import {persistStore} from "redux-persist";
 import { Provider } from 'react-redux'
 import Store from './Store/configureStore'
 import { PersistGate } from 'redux-persist/es/integration/react'
+import ViewPDF from "./src/ViewPDF";
 
 const MainStack = createStackNavigator();
 
@@ -102,7 +103,8 @@ function MainStackScreen() {
         <MainStack.Screen name='ScoreResults' component={ScoreResults} options={({ navigation, route }) => ({
           headerShown: false,
         })}/>
-      </MainStack.Navigator>
+        <MainStack.Screen name="ViewPDF" component={ViewPDF} />
+          </MainStack.Navigator>
   );
 }
 
