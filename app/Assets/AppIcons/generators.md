@@ -4,6 +4,7 @@
 
 ## Logo Resize Tutorial
 
+- https://resizeappicon.com/ (the best)
 - https://aboutreact.com/react-native-change-app-icon/
 - https://makeappicon.com/
 
