@@ -7,10 +7,12 @@ class AvatarItem extends React.Component {
 
     constructor(props) {
         super(props);
-        this.randomAvatarList = ['../../Assets/Images/logo_batman.png', "../../Assets/Images/logo_superman.png", "../../Assets/Images/logo_.png"];
+        this.randomAvatarList = [require('../../Assets/Images/logo_batman.png'), require("../../Assets/Images/logo_superman.png"),
+            require("../../Assets/Images/logo_ecology.png"), require("../../Assets/Images/logo_captain.jpeg"), require("../../Assets/Images/logo_heart_tree.jpeg"),
+            require("../../Assets/Images/logo_tree.jpeg")];
         this.state = {
             isLoading: true,
-        }
+        };
     }
 
 
@@ -18,10 +20,11 @@ class AvatarItem extends React.Component {
      * Ensure that the current user is not displayed but the other.
      **/
     _renderAvatarItem(user) {
+        const randomLogo =  Math.floor(Math.random() * (this.randomAvatarList.length + 1));
         return <TouchableOpacity style={styles.main_container}>
             <Image
                 style={styles.image}
-                source={require('../../Assets/Images/logo_batman.png')}
+                source={this.randomAvatarList[randomLogo]}
             />
             <View style={styles.content_container}>
                 <View style={styles.header_container}>
