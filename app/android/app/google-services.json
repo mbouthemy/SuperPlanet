@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:413431826290:android:d1d24643f8627e01ce7feb",
         "android_client_info": {
-          "package_name": "com.app"
+          "package_name": "com.gaialeague"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "413431826290-qpvueptrvl2u89gpincslknk6th798mh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app",
+            "package_name": "com.gaialeague",
             "certificate_hash": "4b1c888b08833ef2d2f45b6d513a21dbbcdb3c6f"
           }
         },
