@@ -100,14 +100,14 @@ class Login extends React.Component {
                     disabled={!this.state.isPossibleToLog}
                 />
 
-                {/*Terms & Conditions footer.
+                {/*Terms & Conditions footer.*/}
                 <Text style={styles.termsConditionText}>
                     By clicking on log in, you agree with our
                     <Text style={styles.linkTermsText}
                           onPress={() => this._openTermsConditions()}> Terms & conditions</Text> and the
                     <Text style={styles.linkTermsText}
                           onPress={() => this._openPrivacyPolicy()}> Privacy Policy.</Text>
-                </Text>*/}
+                </Text>
             </View>
         );
     }

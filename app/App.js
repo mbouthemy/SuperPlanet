@@ -103,7 +103,9 @@ function MainStackScreen() {
         <MainStack.Screen name='ScoreResults' component={ScoreResults} options={({ navigation, route }) => ({
           headerShown: false,
         })}/>
-        <MainStack.Screen name="ViewPDF" component={ViewPDF} />
+        <MainStack.Screen name="ViewPDF" component={ViewPDF} options={({ navigation, route }) => ({
+          title: '',
+        })}/>
           </MainStack.Navigator>
   );
 }
