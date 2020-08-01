@@ -1,3 +1,9 @@
+"""
+Created on Sat Jul  1st August 20:00:00 2020
+
+@author: neroks01@gmail.com
+"""
+
 """restapi URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

@@ -1,3 +1,9 @@
+"""
+Created on Sat Jul  1st August 20:00:00 2020
+
+@author: neroks01@gmail.com
+"""
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -31,10 +37,9 @@ class TrashViewSet(viewsets.ModelViewSet):
             print(request.data)
             file_before = request.FILES["file_before"]
             file_after = request.FILES["file_after"]
-            # print(len(files))
             trash = Trash(trash_count=-10, file_before=file_before, file_after=file_after)
             s_trash = TrashSerializer(trash, context={'request': request})
-            # return Response(s_trash.data, )
+            # return Response(s_trash.data )
             return Response({"trash_count": -10})
         except Exception as e:
             return Response(traceback.format_exc())
