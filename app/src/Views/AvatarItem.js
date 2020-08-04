@@ -34,7 +34,7 @@ class AvatarItem extends React.Component {
                     <Text style={styles.score_text}>Score: {user.points}</Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity>;
     }
 
     render() {

@@ -7,6 +7,7 @@ import {updateInformationUserFirebase} from "../../Services/UploadService";
 import auth from "@react-native-firebase/auth";
 import {convertDateFormatToSeconds} from "../../Utils/Utils";
 import firestore from "@react-native-firebase/firestore";
+import {config} from "../../Utils/config";
 
 
 class ScoreResults extends React.Component {
@@ -29,13 +30,27 @@ class ScoreResults extends React.Component {
     }
 
     _sendImagesToAPIAndGetScore() {
-        console.log('[RESULTS] SENDING THE TWO IMAGES, WAITING 5 SECONDS');
-        this.setState({scorePoints: 5});
-        updateInformationUserFirebase(auth().currentUser.uid, {points: firestore.FieldValue.increment(this.state.scorePoints)})
-            .then(() => {
-                console.log('Success: Updated image in Firebase of the user: ', auth().currentUser.uid);
-            })
-            .catch((error) => console.log(error));
+        const body = new FormData;
+        body.append("url_before", this.props.startMission.imageURL);
+        body.append("url_after", this.props.endMission.imageURL);
+
+        fetch(config.endpointAPI, {
+            body,
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then((data) => {
+                console.log('[TRASH COUNT]: ', data.trash_count);
+                this.setState({scorePoints: 5});
+                updateInformationUserFirebase(auth().currentUser.uid, {points: firestore.FieldValue.increment(this.state.scorePoints)})
+                    .then(() => {
+                        console.log('Success: Updated image in Firebase of the user: ', auth().currentUser.uid);
+                    })
+                    .catch((error) => console.log(error));
+        });
     }
 
 
