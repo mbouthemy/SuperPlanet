@@ -12,3 +12,5 @@ class Trash(models.Model):
     file_after = models.FileField(verbose_name="Trash image after", blank=True, null=True)
     trash_count = models.IntegerField(default=0)
 
+    url_before = models.URLField(blank=True, null=True, max_length=500)
+    url_after = models.URLField(blank=True, null=True, max_length=500)
