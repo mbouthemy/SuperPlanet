@@ -52,15 +52,15 @@ class StartMission extends React.Component {
     _uploadImage(){
         ImagePicker.showImagePicker(imagePickerOptions, (response) => {
             if (response.didCancel) {
-                console.log('Post Canceled')
+                console.log('Post Canceled');
             }
             else if (response.error) {
-                console.log('Error : ', response.error)
+                console.log('Error : ', response.error);
             }
             else {
-                console.log('Photo URI: ', response.uri )
-                let requireSource = { uri: response.uri }
-                this.setState({imageURI: requireSource, isLoading: true})
+                console.log('Photo URI: ', response.uri );
+                let requireSource = { uri: response.uri };
+                this.setState({imageURI: requireSource, isLoading: true});
 
                 const pathFirestoreImageUser: string = 'users/' + auth().currentUser.uid + '/images/start_img_' + getFormattedDate(true);
 
@@ -85,7 +85,7 @@ class StartMission extends React.Component {
                     })
                     .catch(error => {console.log('Error: ', error)});
             }
-        })
+        });
     }
 
 
@@ -108,8 +108,6 @@ class StartMission extends React.Component {
                     <Text style={styles.textIcon}>Start a new mission !</Text>
                 </TouchableOpacity>
                 <Image style={styles.imagePark} source={require('../../Assets/Images/park_with_garbage.jpg')}/>
-
-                {this.state.imageURI !== '' && <Image source={this.state.imageURI} style={styles.iconRecord} />}
                 {renderLoading(this.state.isLoading)}
             </View>
         );
