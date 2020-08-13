@@ -10,6 +10,7 @@ It is made for the challenge of Pytorch Summer Hackathon 2020.
 The library has some requirements :
  - React Native
  - Python
+ - Django
 
 To install all this requirement you can run:
 
@@ -29,7 +30,7 @@ The library contains the two following directories:
      - src/Views -> All the views of the application
      - src/Components -> All the components for the application
      - Inputs -> The inputs files.
- - 'server' which contains the server function used for Pytorch and Deep Learning comparison of the pictures
+ - 'gaialeague_ml' which contains the server function used for Pytorch and Deep Learning comparison of the pictures
  
  
  
