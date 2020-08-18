@@ -55,13 +55,13 @@ def load_net(checkpoint_path):
 
 
 # EFF_NET = load_net(BASE_DIR+'/checkpoints/best-checkpoint-003epoch.bin')
-EFF_NET = load_net(BASE_DIR+'/checkpoints/best-checkpoint-014epoch.bin')
+# EFF_NET = load_net(BASE_DIR+'/checkpoints/best-checkpoint-014epoch.bin')
 # EFF_NET = load_net(BASE_DIR+'/checkpoints/best-checkpoint-012epoch.bin')
-EFF_NET = load_net(BASE_DIR+'/checkpoints/kaggle_effdetv5/effdet5-cutmix-augmix/best-checkpoint-014epoch.bin')
+EFF_NET = load_net(BASE_DIR+'/checkpoints/kaggle_effdetv5/effdet5-cutmix-augmix/best-checkpoint-012epoch.bin')
 
 
 
-def run_wbf(predictions, image_size=512, iou_thr=0.45, skip_box_thr=0.25, weights=None):
+def run_wbf(predictions, image_size=512, iou_thr=0.25, skip_box_thr=0.15, weights=None):
     boxes = [(prediction['boxes']/(image_size-1)).tolist()  for prediction in predictions]
     scores = [prediction['scores'].tolist()  for prediction in predictions]
     labels = [np.ones(prediction['scores'].shape[0]).tolist() for prediction in predictions]
@@ -81,7 +81,7 @@ def rectangle(image, box):
 
 
 @torch.no_grad()
-def make_predictions(impaths, score_threshold=0.15, wbf=True, draw_boxes=True):
+def make_predictions(impaths, score_threshold=0.075, wbf=True, draw_boxes=True):
     images, heights,widths = list(zip(*[imread(impath, transform=True) for impath in impaths]))
     images = torch.stack(images).to(DEVICE).float()
 

@@ -31,7 +31,7 @@ from urllib.parse import unquote
 from pathlib import Path
 from tempfile import TemporaryFile, NamedTemporaryFile
 
-import cv2 
+import cv2, numpy as np
 
 from  threading import Thread
 
@@ -41,11 +41,38 @@ from gaialeague_ml.settings import BASE_DIR
 
 BASE_DIR = Path(BASE_DIR)
 
+SIMILARITY_THRESH = 0.65  
 
 
+def frobenius_similarity(impath1, impath2):
+    img1 = cv2.resize(cv2.imread(impath1.as_posix()).mean(2), (512,512))
+    img2 = cv2.resize(cv2.imread(impath2.as_posix()).mean(2),(512,512))
+    
+    norm = np.linalg.norm((img1 - img2)/255., ord="nuc")/(2*512)
+    # print("norm:", norm)
+    
+    return np.exp(-norm)
+
+def jpeg_compression_size(impath, IMWRITE_JPEG_QUALITY=75):
+    impath = Path(impath)
+    assert impath.exists(), f"The path `{impath}` dos not exist, compression couldn't be done !"
+    jpeg_impath = impath.with_name("jpeg_{}".format(impath.name))
+    compression_param = [int(cv2.IMWRITE_JPEG_QUALITY), IMWRITE_JPEG_QUALITY]
+    img = cv2.resize(cv2.imread(impath.as_posix()), (512,512))
+    cv2.imwrite(jpeg_impath.as_posix(), img,  compression_param)
+
+    imsize = os.path.getsize(jpeg_impath.as_posix())
+    jpeg_impath.unlink()
+
+    return imsize
 
 
+def jpeg_similarity_score(impath1, impath2, IMWRITE_JPEG_QUALITY=75):
+    imsize1 = jpeg_compression_size(impath1, IMWRITE_JPEG_QUALITY=IMWRITE_JPEG_QUALITY)
+    imsize2 = jpeg_compression_size(impath2, IMWRITE_JPEG_QUALITY=IMWRITE_JPEG_QUALITY)
+    ratio = (1+imsize1)/(1+imsize2)
 
+    return 1/ratio if ratio > 1 else ratio
 
 def parse_url(url):
     """
@@ -85,7 +112,7 @@ def remove_old_temp_files(max_duration=10*60):
                 if delta > max_duration:
                     file.unlink()
                     # print(file, d)
-            print(file.name, d, delta)
+            # print(file.name, d, delta)
 
 class OldTempFileRemover(Thread):
     def __init__(self, wait=10*60):
@@ -97,12 +124,10 @@ class OldTempFileRemover(Thread):
             remove_old_temp_files(self.wait)
             time.sleep(self.wait)
 
-# temp_file_romover = OldTempFileRemover(60*10)
-# temp_file_romover.start()
+temp_file_romover = OldTempFileRemover(60*10)
+temp_file_romover.start()
 
 def download(request, temp_name):
-    # remove_old_temp_files()
-
     filepath = BASE_DIR.joinpath("temp", get_valid_filename(temp_name))
     assert filepath.exists(), "Wrong key `{}`!".format(temp_name)
     return serve(request, filepath.name, filepath.parent)
@@ -146,7 +171,6 @@ class TrashDetectorView(viewsets.ModelViewSet):
     def predict_from_uploaded_file(self, file):
         fileuuid = self.get_file_uuid(file.name)
         filepath = BASE_DIR.joinpath("temp", fileuuid + "." + file.name.split(".")[-1] )
-        # with open("./temp.{}".format(file.name.split(".")[-1]), "wb+") as f:
         with filepath.open("wb+") as f:
             for chunk in file.chunks():
                 f.write(chunk)
@@ -157,12 +181,16 @@ class TrashDetectorView(viewsets.ModelViewSet):
         content = requests.get(url).content
         fileuuid = self.get_file_uuid(url)
         filepath = BASE_DIR.joinpath("temp", fileuuid + "." + url_data["ext"] )
-        # with NamedTemporaryFile("wb", suffix= "." + url_data["ext"]) as f:
         with filepath.open("wb") as f:
             f.write(content)
         return self._predict(filepath), filepath.name
 
     def predict(self, trash: TrashDetectionInput):
+        # print("\n ****************   PREDICT\n")
+        # print(trash.file)
+        # print(trash.url)
+        # print("\n\n")
+
         try:
             trash.full_clean()
         except Exception as e:
@@ -187,15 +215,6 @@ class TrashDetectorView(viewsets.ModelViewSet):
             file = None
             url = request.data.get("url", None)
         trash = TrashDetectionInput(file=file, url=url)
-
-        # try:
-        #     trash.full_clean()
-        #     # prediction = self.predict(trash)
-        #     # result = TrashDetectionResult(trash_count=prediction["trash_count"], status="SUCCEEDED")
-        #     result = self.predict(trash)
-        # except Exception as e:
-        #     result = TrashDetectionResult(trash_count=-100, status="FAILED",
-        #     msg="Bad arguments to ThrashCounter: We Can No More Make the Planet Great Again !\n{}".format(traceback.format_exc()))
 
         result = self.predict(trash)
         s_result = TrashDetectionResultSerializer(result, context={'request': request})
@@ -229,42 +248,9 @@ class TrashViewSet(viewsets.ModelViewSet):
         `-F` "**url_before**=https://photos.com/photo_before.jpg"
         `-F` "**url_after**=https://photos.com/photo_after.png"
     """
+
     queryset = TrashCountInput.objects.none()
     serializer_class = TrashCountInputSerializer
-    # parser_classes = (JSONParser,PlainTextParser,)
-    # permission_classes = [permissions.IsAuthenticated]
-    # renderer_classes = [MultiPartRenderer,JSONOpenAPIRenderer,JSONRenderer]
-
-
-    # @staticmethod
-    # def parse_url(url):
-    #     """
-    #     Fast function, needs some error handling !!!
-    #     """
-    #     url = unquote(url)
-    #     filename = re.search(r"/(.+)\?", url)
-    #     if filename is None:
-    #         splits = url.split("/")
-    #         assert len(splits) > 1, "Bad url !"
-    #         filename = splits[-1]
-    #     else:
-    #         filename = filename.group(1)
-        
-    #     # Safe string to filename
-    #     filename = get_valid_filename(filename)
-
-    #     ext = filename.split(".")[-1]
-
-    #     assert  ext in ["jpg", "png", "jpeg"], "Bad image extension : `{}`".format(ext)
-
-    #     return {"filename": filename, "ext": ext}
-
-    # @staticmethod
-    # def save_file_from_url(url, basename, mode="wb"):
-    #     url_data = TrashViewSet.parse_url(url)
-    #     content = requests.get(url).content
-    #     with open("{}.{}".format(basename, url_data["ext"]), mode=mode) as f:
-    #         f.write(content)
 
     def predict(self, request, before=True):
         suffix = "before" if before else "after"
@@ -280,44 +266,24 @@ class TrashViewSet(viewsets.ModelViewSet):
 
         return result
         
-
-
-    # def create(self, request):
-    #     try:
-    #         file_before = request.FILES.get("file_before", None)
-    #         if file_before :
-    #             file_after = request.FILES.get("file_after", None)
-    #             assert file_after, "file_after must be non null as file_before"
-    #             url_before = ""
-    #             url_after = ""
-    #         else:
-    #             file_after = None
-    #             url_before = request.data.get("url_before", None)
-    #             if url_before :
-    #                 url_after = request.data.get("url_after", None)
-    #                 assert url_after, "url_after must be non null as url_before"
-
-    #                 self.save_file_from_url(url_before, basename="image_before")
-    #                 self.save_file_from_url(url_after, basename="image_after")
-    #             else:
-    #                 url_after = ""
-
-    #         trash = TrashCountInput(file_before=file_before, file_after=file_after,url_before=url_before, url_after=url_after)
-
-    #         try:
-    #             trash.full_clean()
-    #         except ValidationError as e:
-    #             raise ValueError("Bad arguments to ThrashCounter: We Can No More Make the Planet Great Again !") from e
-
-    #         s_trash = TrashCountInputSerializer(trash, context={'request': request})
-            
-    #         return Response({"trash_count": -10})
-    #     except Exception as e:
-    #         return Response(traceback.format_exc())
-
     def create(self, request):
+        # print("\n\n")
+        # print(request.data)
+        # print(request.FILES)
+        # print("\n\n")
+        
         result_before = self.predict(request, before=True)
         result_after = self.predict(request, before=False)
+        if (result_before.status == "SUCCEEDED") and (result_after.status == "SUCCEEDED"):
+            status = "SUCCEEDED"
+            impath1 = BASE_DIR.joinpath("temp", result_before.download_link)
+            impath2 = BASE_DIR.joinpath("temp", result_after.download_link)
+            similarity_score = jpeg_similarity_score(impath1, impath2)
+            # similarity_score = frobenius_similarity(impath1, impath2)
+            is_same = (similarity_score > SIMILARITY_THRESH)
+        else:
+            status, similarity_score, is_same = "FAILED", 0., False
+
         result = TrashCountResult(
             trash_count_before=result_before.trash_count,
             trash_count_after=result_after.trash_count,
@@ -326,11 +292,10 @@ class TrashViewSet(viewsets.ModelViewSet):
             download_link_before=result_before.download_link,
             download_link_after=result_after.download_link,
 
-            is_same=None,
-            similarity_score=None,
+            is_same=is_same,
+            similarity_score=similarity_score,
 
-            status="SUCCEEDED" if (result_before.status == "SUCCEEDED")\
-                    and (result_after.status == "SUCCEEDED") else "FAILED",
+            status=status,
             msg= (("" or result_before.msg) + "\n" + ("" or result_after.msg)).strip()
         )
 

@@ -25,12 +25,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'fq31a#=@=%qei4#@qv%#_d1ih5^b^%z_*ie6=#fp2py@&w^(vz'
+SECRET_KEY = "\!JsVF)%XD\.yZXbh[&c6vbM4rHmYuTg"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0'] + ([os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net'] if 'WEBSITE_SITE_NAME' in os.environ else [])
 
 
 # Application definition
@@ -132,4 +132,4 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-ALLOWED_HOSTS = ['localhost', '127.0.0.1'] + [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net'] if 'WEBSITE_SITE_NAME' in os.environ else []
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1'] + [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net'] if 'WEBSITE_SITE_NAME' in os.environ else []
