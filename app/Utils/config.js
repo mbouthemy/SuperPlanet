@@ -1,4 +1,5 @@
 
 export const config = {
-    endpointAPI: "http://api-super-planet.azurewebsites.net/detect/"
+    endpointAPI: "http://api-super-planet.azurewebsites.net/detect/",
+    endpointDownloadImage: "http://api-super-planet.azurewebsites.net/download/"
 };

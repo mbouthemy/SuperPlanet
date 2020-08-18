@@ -1,7 +1,7 @@
 // Views/StartMission.js
 
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Button, Switch, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, View, Text, Button, Switch, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import auth from "@react-native-firebase/auth";
 
 import ImagePicker from 'react-native-image-picker';
@@ -90,7 +90,13 @@ class StartMission extends React.Component {
 
 
     render() {
-
+        if (this.state.isLoading) {
+            return (
+                <View style={styles.loading_container}>
+                    <ActivityIndicator size='large' />
+                </View>
+            );
+        }
         return (
             <View style={styles.main_container}>
 {/*                <Button
@@ -108,7 +114,6 @@ class StartMission extends React.Component {
                     <Text style={styles.textIcon}>Start a new mission !</Text>
                 </TouchableOpacity>
                 <Image style={styles.imagePark} source={require('../../Assets/Images/park_with_garbage.jpg')}/>
-                {renderLoading(this.state.isLoading)}
             </View>
         );
     }
@@ -153,6 +158,16 @@ const styles = StyleSheet.create({
     iconRecord: {
         width: 50,
         height: 50
+    },
+    loading_container: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F3F3F3'
     },
 });
 
