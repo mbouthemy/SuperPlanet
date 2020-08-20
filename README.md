@@ -12,7 +12,20 @@ The library has some requirements :
  - Python
  - Django
 
-To install all this requirement you can run:
+
+# Machine Learning Explanation / Server Side
+
+
+Write here the description of the algorithm and the files structure.
+
+
+
+
+
+# App Explanation / Client Side
+
+
+To install the app requirement you can run:
 
 ```
 cd app
