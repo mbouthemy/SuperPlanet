@@ -1,8 +1,15 @@
+"""
+Created on 2020-08-25 00:00:00
+
+@author: neroksi
+@co-author: mbouthemy
+
+©SuperPlanet
+"""
+
 from ensemble_boxes import weighted_boxes_fusion
 import torch
 import numpy as np
-# from glob import glob
-# from torch.utils.data import Dataset,DataLoader
 import albumentations as A
 from albumentations.pytorch.transforms import ToTensorV2
 import cv2

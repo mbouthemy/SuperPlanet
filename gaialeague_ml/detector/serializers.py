@@ -1,7 +1,10 @@
 """
-Created on Sat Jul  1st August 20:00:00 2020
+Created on 2020-08-25 00:00:00
 
-@author: neroks01@gmail.com
+@author: neroksi
+@co-author: mbouthemy
+
+©SuperPlanet
 """
 
 from .models import TrashDetectionInput, TrashDetectionResult, TrashCountInput, TrashCountResult

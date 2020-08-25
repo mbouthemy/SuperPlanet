@@ -1,7 +1,10 @@
 """
-Created on Sat Jul  1st August 20:00:00 2020
+Created on 2020-08-25 00:00:00
 
-@author: neroks01@gmail.com
+@author: neroksi
+@co-author: mbouthemy
+
+©SuperPlanet
 """
 
 from django.shortcuts import render
@@ -267,11 +270,6 @@ class TrashViewSet(viewsets.ModelViewSet):
         return result
         
     def create(self, request):
-        # print("\n\n")
-        # print(request.data)
-        # print(request.FILES)
-        # print("\n\n")
-        
         result_before = self.predict(request, before=True)
         result_after = self.predict(request, before=False)
         if (result_before.status == "SUCCEEDED") and (result_after.status == "SUCCEEDED"):
