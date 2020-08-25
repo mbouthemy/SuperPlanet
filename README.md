@@ -41,12 +41,12 @@ react-native start
 
 The library contains the two following directories:
 
- - 'app' which contains the mobile application:
+ - [app](https://github.com/mbouthemy/SuperPlanet/tree/master/app) which contains the mobile application:
      - Assets -> Images, Audios, Languages...
      - src/Views -> All the views of the application
      - src/Components -> All the components for the application
      - Inputs -> The inputs files.
- - 'gaialeague_ml' which contains the server function used for Pytorch and Deep Learning comparison of the pictures
+ -  [gaialeague_ml](https://github.com/mbouthemy/SuperPlanet/tree/master/gaialeague_ml) which contains the server function used for Pytorch and Deep Learning comparison of the pictures
  
  
  
