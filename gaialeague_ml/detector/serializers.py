@@ -1,13 +1,32 @@
 """
-Created on Sat Jul  1st August 20:00:00 2020
+Created on 2020-08-25 00:00:00
 
-@author: neroks01@gmail.com
+@author: neroksi
+@co-author: mbouthemy
+
+©SuperPlanet
 """
 
-from .models import Trash
+from .models import TrashDetectionInput, TrashDetectionResult, TrashCountInput, TrashCountResult
 from rest_framework import serializers
 
-class TrashSerializer(serializers.HyperlinkedModelSerializer):
+class TrashDetectionInputSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Trash
+        model = TrashDetectionInput
+        fields = "__all__"
+
+class TrashDetectionResultSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TrashDetectionResult
+        fields = "__all__"
+
+
+class TrashCountInputSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TrashCountInput
+        fields = "__all__"
+
+class TrashCountResultSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TrashCountResult
         fields = "__all__"
