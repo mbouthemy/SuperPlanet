@@ -41,7 +41,7 @@ react-native start
 
 The library contains the two following directories:
 
- - [app](https://github.com/mbouthemy/SuperPlanet/tree/master/app):which contains the mobile application:
+ - [app](https://github.com/mbouthemy/SuperPlanet/tree/master/app): which contains the mobile application:
      - Assets -> Images, Audios, Languages...
      - src/Views -> All the views of the application
      - src/Components -> All the components for the application
