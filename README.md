@@ -18,11 +18,16 @@ The library has some requirements :
 
 # Machine Learning Explanation / Server Side
 
+This is a an implementation in PyTorch of EfficientDet.
 
-Write here the description of the algorithm and the files structure.
+It is based on the
+
+    official Tensorflow implementation by Mingxing Tan and the Google Brain team
+    paper by Mingxing Tan, Ruoming Pang, Quoc V. Le EfficientDet: Scalable and Efficient Object Detection
 
 
-
+You can find the API part inside the folder gaialeague_ml/detector.
+The EffidientDet model is located in the gaialeague_ml/libs folder. We also reused part that we have already build for another Kaggle competition and we have adapted it based on the garbage dataset.
 
 
 # App Explanation / Client Side
